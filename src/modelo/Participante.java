@@ -10,13 +10,13 @@ public class Participante {
 	private String nascimento;
 	private ArrayList<Ingresso> ingressos = new ArrayList <>();
 
-	
 
 	public Participante (String cpf, String nascimento) {
 		this.cpf = cpf;
 		this.nascimento = nascimento;
-		
 	}
+
+
 	
 	public String getCPF() {
 		return cpf;
