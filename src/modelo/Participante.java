@@ -31,6 +31,14 @@ public class Participante {
 		return Period.between(dataNasc, dataAtual).getYears();	
 		
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Participante{" +
+				"cpf='" + cpf + '\'' +
+				", nascimento='" + nascimento + '\'' +
+				", ingressos=" + ingressos +
+				'}';
+	}
 }
 

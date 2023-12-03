@@ -16,4 +16,30 @@ public class Ingresso {
         return codigo;
     }
 
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public Evento getEvento() {
+        return evento;
+    }
+
+    public Participante getParticipante() {
+        return participante;
+    }
+
+
+    public double calcularPreco() {
+        return evento.totalArrecadado();
+    }
+
+    @Override
+    public String toString() {
+        return "Ingresso{" +
+                "codigo='" + codigo + '\'' +
+                ", telefone='" + telefone + '\'' +
+                ", evento=" + evento +
+                ", participante=" + participante +
+                '}';
+    }
 }
