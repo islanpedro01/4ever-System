@@ -18,10 +18,10 @@ public class Fachada {
         if (data.isEmpty()) {
             throw new Exception("A data não pode ser vazia!");
         }
-        if (descricao.isEmpty()){
+        if (descricao.isEmpty()) {
             throw new Exception("A descrição não pode ser vazia!");
         }
-        if (capacidade < 2){
+        if (capacidade < 2) {
             throw new Exception("A capacidade do evento deve ser de no mínimo 2 ingressos!");
         }
         int idEvento = repositorio.gerarId();
@@ -37,8 +37,12 @@ public class Fachada {
             throw new Exception(mensagem);
         }
 
-        Participante participante = new Participante(cpf, nascimento);
-        repositorio.adicionar(participante);
+        if (nascimento.isEmpty()) {
+            throw new Exception("A data de nascimento não pode ser vazia!");
+        }
+
+        part = new Participante(cpf, nascimento);
+        repositorio.adicionar(part);
     }
 
     public static void criarConvidado(String cpf, String nascimento, String empresa) throws Exception {
@@ -49,12 +53,20 @@ public class Fachada {
             throw new Exception(mensagem);
         }
 
+        if (empresa.isEmpty()) {
+            throw new Exception("O campo empresa não pode ser vazio!");
+        }
+
         Convidado convidado = new Convidado(cpf, nascimento, empresa);
         repositorio.adicionarConvidado(convidado);
     }
 
-    public static void criarIngresso(int id, String cpf, String telefone) throws Exception{
+    public static void criarIngresso(int id, String cpf, String telefone) throws Exception {
         Evento e = repositorio.localizarEvento(id);
+
+        if (e == null) {
+            throw new Exception("O evento informado não existe!");
+        }
 
         if (e.lotado()) {
             throw new Exception("O evento está em sua capacidade máxima!");
@@ -68,12 +80,13 @@ public class Fachada {
 
         String codigo = id + " - " + cpf;
         Ingresso ingresso = new Ingresso(codigo, e, telefone);
+        repositorio.adicionar(ingresso);
     }
 
-    public static void apagarEvento(int id) throws Exception{
+    public static void apagarEvento(int id) throws Exception {
         Evento e = repositorio.localizarEvento(id);
 
-        if (e.quantidadeIngressos() != 0){
+        if (e.quantidadeIngressos() != 0) {
             throw new Exception("Não é possível apagar o evento. Há ingressos cadastrados!");
         }
         repositorio.remover(e);

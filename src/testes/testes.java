@@ -4,6 +4,7 @@ import modelo.Participante;
 import modelo.Evento;
 import regras_negocio.Fachada;
 import modelo.Ingresso;
+import repositorio.Repositorio;
 
 public class testes {
     public static void main(String[] args) {
@@ -19,7 +20,6 @@ public class testes {
             System.out.println("---------listagem de participantes e convidados -----");
             for(Participante p : Fachada.listarParticipantes())
                 System.out.println(p);
-
         } catch (Exception e) {
             System.out.println("--->"+e.getMessage());
         }

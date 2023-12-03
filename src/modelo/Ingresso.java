@@ -1,6 +1,10 @@
 package modelo;
 
+import repositorio.Repositorio;
+
 public class Ingresso {
+
+    private static Repositorio repositorio;
     private String codigo;
     private String telefone;
     private Evento evento;
@@ -10,6 +14,8 @@ public class Ingresso {
         this.codigo = codigo;
         this.evento = e;
         this.telefone = telefone;
+        String cpfPart = codigo.split("-")[1];
+        participante = repositorio.localizarParticipante(cpfPart);
     }
 
     public String getCodigo() {
@@ -28,7 +34,6 @@ public class Ingresso {
         return participante;
     }
 
-
     public double calcularPreco() {
         return evento.totalArrecadado();
     }
@@ -36,10 +41,10 @@ public class Ingresso {
     @Override
     public String toString() {
         return "Ingresso{" +
-                "codigo='" + codigo + '\'' +
-                ", telefone='" + telefone + '\'' +
-                ", evento=" + evento +
-                ", participante=" + participante +
+                "codigo='" + getCodigo() + '\'' +
+                ", telefone='" + getTelefone() + '\'' +
+                ", evento=" + getEvento() +
+                ", participante=" + getParticipante() +
                 '}';
     }
 }
