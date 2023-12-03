@@ -38,4 +38,19 @@ public class Evento {
         return preco * quantidadeIngressos();
     }
 
+    public double getPreco() {
+        return preco;
+    }
+
+    @Override
+    public String toString() {
+        return "Evento{" +
+                "id=" + id +
+                ", data='" + data + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", capacidade=" + capacidade +
+                ", preco=" + preco +
+                ", ingressos=" + ingressos +
+                '}';
+    }
 }
