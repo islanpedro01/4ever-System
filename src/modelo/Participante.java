@@ -1,5 +1,7 @@
 package modelo;
 
+import repositorio.Repositorio;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -16,8 +18,6 @@ public class Participante {
 		this.nascimento = nascimento;
 	}
 
-
-	
 	public String getCPF() {
 		return cpf;
 	}
@@ -28,8 +28,7 @@ public class Participante {
 		LocalDate dataNasc = LocalDate.parse(nascimento,f1); 
 		LocalDate dataAtual = LocalDate.now();
 		
-		return Period.between(dataNasc, dataAtual).getYears();	
-		
+		return Period.between(dataNasc, dataAtual).getYears();
 	}
 
 	@Override
@@ -40,5 +39,6 @@ public class Participante {
 				", ingressos=" + ingressos +
 				'}';
 	}
+
 }
 
