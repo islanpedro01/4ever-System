@@ -1,12 +1,12 @@
 package regras_negocio;
 
+import java.util.ArrayList;
+
 import modelo.Convidado;
 import modelo.Evento;
 import modelo.Ingresso;
 import modelo.Participante;
 import repositorio.Repositorio;
-
-import java.util.ArrayList;
 
 public class Fachada {
     private static Repositorio repositorio = new Repositorio();
@@ -58,19 +58,10 @@ public class Fachada {
         }
 
         Convidado convidado = new Convidado(cpf, nascimento, empresa);
-        repositorio.adicionarConvidado(convidado);
+        repositorio.adicionar(convidado);
     }
 
     public static void criarIngresso(int id, String cpf, String telefone) throws Exception {
-        Evento e = repositorio.localizarEvento(id);
-
-        if (e == null) {
-            throw new Exception("O evento informado não existe!");
-        }
-
-        if (e.lotado()) {
-            throw new Exception("O evento está em sua capacidade máxima!");
-        }
         if (cpf.isEmpty()) {
             throw new Exception("O campo cpf não pode estar vazio!");
         }
@@ -78,8 +69,26 @@ public class Fachada {
             throw new Exception("O campo telefone não pode estar vazio!");
         }
 
-        String codigo = id + " - " + cpf;
-        Ingresso ingresso = new Ingresso(codigo, e, telefone);
+        Evento e = repositorio.localizarEvento(id);
+        Participante p = repositorio.localizarParticipante(cpf);
+
+        if (e == null) {
+            throw new Exception("O evento informado não existe!");
+        }
+
+        if (p == null) {
+            throw new Exception("O CPF informado não é de um participante válido!");
+        }
+
+        if (e.lotado()) {
+            throw new Exception("O evento está em sua capacidade máxima!");
+        }
+
+        String codigo = id + "-" + cpf;
+        Ingresso ingresso = new Ingresso(codigo, telefone);
+        e.adicionarIngresso(ingresso);
+        p.adicionarIngresso(ingresso);
+
         repositorio.adicionar(ingresso);
     }
 
