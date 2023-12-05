@@ -42,7 +42,6 @@ public class Repositorio {
         return null;
     }
 
-
     public void adicionar(Participante p) {
         participantes.add(p);
     }

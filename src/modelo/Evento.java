@@ -60,15 +60,19 @@ public class Evento {
         return ingressos;
     }
 
+    public void adicionarIngresso(Ingresso i){
+        i.setEvento(this);
+        ingressos.add(i);
+    }
+
     @Override
     public String toString() {
         return "Evento{" +
-                "id=" + getId() +
-                ", data='" + getData() + '\'' +
-                ", descricao='" + getDescricao() + '\'' +
-                ", capacidade=" + getCapacidade() +
-                ", preco=" + getPreco() +
-                ", ingressos=" + getIngressos() +
+                "id=" + id +
+                ", data='" + data + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", capacidade=" + capacidade +
+                ", preco=" + preco +
                 '}';
     }
 }

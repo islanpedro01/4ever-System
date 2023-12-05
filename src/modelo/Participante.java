@@ -12,10 +12,14 @@ public class Participante {
 	private String nascimento;
 	private ArrayList<Ingresso> ingressos = new ArrayList <>();
 
-
 	public Participante (String cpf, String nascimento) {
 		this.cpf = cpf;
 		this.nascimento = nascimento;
+	}
+
+	//relacionamento bidirecional com a classe Ingresso
+	public void setIngresso(Ingresso i){
+		this.ingressos.add(i);
 	}
 
 	public String getCPF() {
@@ -36,8 +40,12 @@ public class Participante {
 		return "Participante{" +
 				"cpf='" + cpf + '\'' +
 				", nascimento='" + nascimento + '\'' +
-				", ingressos=" + ingressos +
 				'}';
+	}
+
+	public void adicionarIngresso(Ingresso i){
+		i.setParticipante(this);
+		ingressos.add(i);
 	}
 
 }
