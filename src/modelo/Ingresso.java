@@ -1,9 +1,11 @@
 package modelo;
 
+import regras_negocio.Fachada;
 import repositorio.Repositorio;
 
 public class Ingresso {
 
+    Repositorio repositorio;
     private String codigo;
     private String telefone;
     private Evento evento;
@@ -29,7 +31,6 @@ public class Ingresso {
 
     public void setEvento(Evento e) {
         this.evento = e;
-//        e.adicionarIngresso(this);
     }
 
     public Participante getParticipante() {
@@ -38,14 +39,29 @@ public class Ingresso {
 
     public void setParticipante(Participante p) {
         this.participante = p;
-//        p.adicionarIngresso(this);
     }
 
     public double calcularPreco() {
-        if(participante.calcularIdade() > 18)return evento.getPreco()*0.1;
-        if(participante.calcularIdade() >= 18 && participante.calcularIdade() < 60) return evento.getPreco();
-        return evento.getPreco()*0.2;
-
+        //sabendo o preço caso o participante seja convidado;
+        if (participante instanceof Convidado){
+            if (participante.calcularIdade() > 18) {
+                double valor = 0;
+                valor = evento.getPreco() * 0.9;
+                valor = valor * 0.5;
+                return valor;
+            }
+            if (participante.calcularIdade() >= 18 && participante.calcularIdade() < 60) {
+                return evento.getPreco() * 0.5;
+            }
+            double valor = 0;
+            valor = evento.getPreco() * 0.8;
+            valor = valor * 0.5;
+            return valor;
+        }
+        //caso seja um participante comum
+        if (participante.calcularIdade() > 18) return evento.getPreco() * 0.9;
+        if (participante.calcularIdade() >= 18 && participante.calcularIdade() < 60) return evento.getPreco();
+        return evento.getPreco() * 0.8;
     }
 
     @Override
