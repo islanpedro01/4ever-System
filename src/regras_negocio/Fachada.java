@@ -71,6 +71,7 @@ public class Fachada {
 
         Evento e = repositorio.localizarEvento(id);
         Participante p = repositorio.localizarParticipante(cpf);
+        
 
         if (e == null) {
             throw new Exception("O evento informado não existe!");
@@ -85,6 +86,13 @@ public class Fachada {
         }
 
         String codigo = id + "-" + cpf;
+
+        Ingresso i = repositorio.localizarIngresso(codigo);
+
+        if (i != null){
+            throw new Exception("Ingresso Duplicado!");
+        }
+
         Ingresso ingresso = new Ingresso(codigo, telefone);
         e.adicionarIngresso(ingresso);
         p.adicionarIngresso(ingresso);

@@ -17,9 +17,13 @@ public class Participante {
 		this.nascimento = nascimento;
 	}
 
-	//relacionamento bidirecional com a classe Ingresso
-	public void setIngresso(Ingresso i){
-		this.ingressos.add(i);
+	public void adicionarIngresso(Ingresso i){
+		i.setParticipante(this);
+		ingressos.add(i);
+	}
+
+	public ArrayList<Ingresso> getIngressos(){
+		return ingressos;
 	}
 
 	public String getCPF() {
@@ -43,10 +47,7 @@ public class Participante {
 				'}';
 	}
 
-	public void adicionarIngresso(Ingresso i){
-		i.setParticipante(this);
-		ingressos.add(i);
-	}
+
 
 }
 
