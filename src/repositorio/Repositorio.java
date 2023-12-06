@@ -50,11 +50,11 @@ public class Repositorio {
         participantes.remove(p);
     }
 
-    public void adicionarConvidado(Convidado c) {
+    public void adicionar(Convidado c) {
         participantes.add(c);
     }
 
-    public void removerConvidado(Convidado c) {
+    public void remover(Convidado c) {
         participantes.remove(c);
     }
 
