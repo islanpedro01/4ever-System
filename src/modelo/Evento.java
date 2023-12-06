@@ -1,5 +1,6 @@
 package modelo;
 
+import regras_negocio.Fachada;
 import repositorio.Repositorio;
 
 import java.util.ArrayList;
@@ -37,7 +38,12 @@ public class Evento {
     }
 
     public double totalArrecadado() {
-        return preco * quantidadeIngressos();
+        double valorTotal = 0;
+        //percorrer todos os ingressos do evento e somar os preços
+        for (Ingresso i: ingressos) {
+            valorTotal += i.calcularPreco();
+        }
+        return valorTotal;
     }
 
     public double getPreco() {

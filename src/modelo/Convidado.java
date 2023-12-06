@@ -8,4 +8,7 @@ public class Convidado extends Participante {
         this.empresa = empresa;
     }
 
+    public String getEmpresa() {
+        return empresa;
+    }
 }
