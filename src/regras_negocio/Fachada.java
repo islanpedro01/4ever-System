@@ -1,5 +1,7 @@
 package regras_negocio;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import modelo.Convidado;
@@ -106,17 +108,50 @@ public class Fachada {
         if (e.quantidadeIngressos() != 0) {
             throw new Exception("Não é possível apagar o evento. Há ingressos cadastrados!");
         }
+        for (Ingresso ingresso:e.getIngressos()){
+            ingresso.setEvento(null);
+        }
         repositorio.remover(e);
     }
 
-    public static void apagarParticipante(String cpf) {
+    public static void apagarParticipante(String cpf) throws Exception{      
         Participante p = repositorio.localizarParticipante(cpf);
+        String data = p.lastIngresso().getEvento().getData();
+        DateTimeFormatter f1;
+		f1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate dataIng = LocalDate.parse(data,f1);
+        LocalDate dataAtual = LocalDate.now();
+
+        if (dataAtual.isBefore(dataIng)){
+            throw new Exception("O participante ainda possui ingressos válidos!");
+        }
+
+        for (Ingresso ingresso:p.getIngressos()){
+            ingresso.setParticipante(null);
+        }
+        p.removerIngressos();
         repositorio.remover(p);
+
     }
 
     public static void apagarIngresso(String codigo) {
         Ingresso i = repositorio.localizarIngresso(codigo);
+        Evento e = i.getEvento();
+        Participante p = i.getParticipante();
+
+        for (Ingresso ingresso:e.getIngressos()){
+            if (ingresso.getCodigo()==i.getCodigo()){
+                e.getIngressos().remove(ingresso);
+            }
+        }
+
+         for (Ingresso ingresso:p.getIngressos()){
+            if (ingresso.getCodigo()==i.getCodigo()){
+                p.getIngressos().remove(ingresso);
+            }
+        }
         repositorio.remover(i);
+
     }
 
     public static ArrayList<Evento> listarEventos() {

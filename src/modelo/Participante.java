@@ -30,6 +30,18 @@ public class Participante {
 		return cpf;
 	}
 	
+	public Ingresso lastIngresso(){ //Método auxiliar para o método apagarParticipante() da fachada.
+		return ingressos.get(ingressos.size()-1);
+
+	}
+
+	public void removerIngressos(){ //Método auxiliar para o método apagarParticipante() da fachada.
+		for (Ingresso ingresso:ingressos){
+			ingressos.remove(ingresso);
+		}
+
+	}
+
 	public int calcularIdade() {
 		DateTimeFormatter f1;
 		f1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
