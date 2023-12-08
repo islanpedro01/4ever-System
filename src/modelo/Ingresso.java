@@ -12,9 +12,11 @@ public class Ingresso {
     private Participante participante;
     private Convidado convidado;
 
-    public Ingresso(String codigo, String telefone) {
+    public Ingresso(String codigo, String telefone, Evento e, Participante p) {
         this.codigo = codigo;
         this.telefone = telefone;
+        this.evento = e;
+        this.participante = p;
     }
 
     public String getCodigo() {

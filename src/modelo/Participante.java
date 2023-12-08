@@ -17,15 +17,34 @@ public class Participante {
 		this.nascimento = nascimento;
 	}
 
-	//relacionamento bidirecional com a classe Ingresso
-	public void setIngresso(Ingresso i){
-		this.ingressos.add(i);
+	public void adicionarIngresso(Ingresso i){
+		ingressos.add(i);
+	}
+
+	public ArrayList<Ingresso> getIngressos(){
+		return ingressos;
 	}
 
 	public String getCPF() {
 		return cpf;
 	}
+
+	public String getNascimento(){
+		return nascimento;
+	}
 	
+	public Ingresso lastIngresso(){ //Método auxiliar para o método apagarParticipante() da fachada.
+		return ingressos.get(ingressos.size()-1);
+
+	}
+
+	public void removerIngressos(){ //Método auxiliar para o método apagarParticipante() da fachada.
+		for (Ingresso ingresso:ingressos){
+			ingressos.remove(ingresso);
+		}
+
+	}
+
 	public int calcularIdade() {
 		DateTimeFormatter f1;
 		f1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -43,10 +62,7 @@ public class Participante {
 				'}';
 	}
 
-	public void adicionarIngresso(Ingresso i){
-		i.setParticipante(this);
-		ingressos.add(i);
-	}
+
 
 }
 
