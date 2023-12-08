@@ -67,7 +67,6 @@ public class Evento {
     }
 
     public void adicionarIngresso(Ingresso i){
-        i.setEvento(this);
         ingressos.add(i);
     }
 

@@ -29,6 +29,7 @@ public class Fachada {
         int idEvento = repositorio.gerarId();
         Evento evento = new Evento(idEvento, data, descricao, capacidade, preco);
         repositorio.adicionar(evento);
+        repositorio.salvarObjetos();
     }
 
     public static void criarParticipante(String cpf, String nascimento) throws Exception {
@@ -45,6 +46,7 @@ public class Fachada {
 
         part = new Participante(cpf, nascimento);
         repositorio.adicionar(part);
+        repositorio.salvarObjetos();
     }
 
     public static void criarConvidado(String cpf, String nascimento, String empresa) throws Exception {
@@ -61,6 +63,7 @@ public class Fachada {
 
         Convidado convidado = new Convidado(cpf, nascimento, empresa);
         repositorio.adicionar(convidado);
+        repositorio.salvarObjetos();
     }
 
     public static void criarIngresso(int id, String cpf, String telefone) throws Exception {
@@ -95,11 +98,12 @@ public class Fachada {
             throw new Exception("Ingresso Duplicado!");
         }
 
-        Ingresso ingresso = new Ingresso(codigo, telefone);
+        Ingresso ingresso = new Ingresso(codigo, telefone, e, p);
         e.adicionarIngresso(ingresso);
         p.adicionarIngresso(ingresso);
 
         repositorio.adicionar(ingresso);
+        repositorio.salvarObjetos();
     }
 
     public static void apagarEvento(int id) throws Exception {
@@ -112,6 +116,7 @@ public class Fachada {
             ingresso.setEvento(null);
         }
         repositorio.remover(e);
+        repositorio.salvarObjetos();
     }
 
     public static void apagarParticipante(String cpf) throws Exception{      
@@ -131,6 +136,7 @@ public class Fachada {
         }
         p.removerIngressos();
         repositorio.remover(p);
+        repositorio.salvarObjetos();
 
     }
 
@@ -151,6 +157,7 @@ public class Fachada {
             }
         }
         repositorio.remover(i);
+        repositorio.salvarObjetos();
 
     }
 

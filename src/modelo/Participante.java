@@ -18,7 +18,6 @@ public class Participante {
 	}
 
 	public void adicionarIngresso(Ingresso i){
-		i.setParticipante(this);
 		ingressos.add(i);
 	}
 
@@ -28,6 +27,10 @@ public class Participante {
 
 	public String getCPF() {
 		return cpf;
+	}
+
+	public String getNascimento(){
+		return nascimento;
 	}
 	
 	public Ingresso lastIngresso(){ //Método auxiliar para o método apagarParticipante() da fachada.
