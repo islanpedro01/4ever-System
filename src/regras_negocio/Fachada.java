@@ -1,5 +1,7 @@
 package regras_negocio;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import modelo.Convidado;
@@ -27,6 +29,7 @@ public class Fachada {
         int idEvento = repositorio.gerarId();
         Evento evento = new Evento(idEvento, data, descricao, capacidade, preco);
         repositorio.adicionar(evento);
+        repositorio.salvarObjetos();
     }
 
     public static void criarParticipante(String cpf, String nascimento) throws Exception {
@@ -43,6 +46,7 @@ public class Fachada {
 
         part = new Participante(cpf, nascimento);
         repositorio.adicionar(part);
+        repositorio.salvarObjetos();
     }
 
     public static void criarConvidado(String cpf, String nascimento, String empresa) throws Exception {
@@ -59,6 +63,7 @@ public class Fachada {
 
         Convidado convidado = new Convidado(cpf, nascimento, empresa);
         repositorio.adicionar(convidado);
+        repositorio.salvarObjetos();
     }
 
     public static void criarIngresso(int id, String cpf, String telefone) throws Exception {
@@ -71,6 +76,7 @@ public class Fachada {
 
         Evento e = repositorio.localizarEvento(id);
         Participante p = repositorio.localizarParticipante(cpf);
+        
 
         if (e == null) {
             throw new Exception("O evento informado não existe!");
@@ -85,11 +91,19 @@ public class Fachada {
         }
 
         String codigo = id + "-" + cpf;
-        Ingresso ingresso = new Ingresso(codigo, telefone);
+
+        Ingresso i = repositorio.localizarIngresso(codigo);
+
+        if (i != null){
+            throw new Exception("Ingresso Duplicado!");
+        }
+
+        Ingresso ingresso = new Ingresso(codigo, telefone, e, p);
         e.adicionarIngresso(ingresso);
         p.adicionarIngresso(ingresso);
 
         repositorio.adicionar(ingresso);
+        repositorio.salvarObjetos();
     }
 
     public static void apagarEvento(int id) throws Exception {
@@ -98,17 +112,53 @@ public class Fachada {
         if (e.quantidadeIngressos() != 0) {
             throw new Exception("Não é possível apagar o evento. Há ingressos cadastrados!");
         }
+        for (Ingresso ingresso:e.getIngressos()){
+            ingresso.setEvento(null);
+        }
         repositorio.remover(e);
+        repositorio.salvarObjetos();
     }
 
-    public static void apagarParticipante(String cpf) {
+    public static void apagarParticipante(String cpf) throws Exception{      
         Participante p = repositorio.localizarParticipante(cpf);
+        String data = p.lastIngresso().getEvento().getData();
+        DateTimeFormatter f1;
+		f1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate dataIng = LocalDate.parse(data,f1);
+        LocalDate dataAtual = LocalDate.now();
+
+        if (dataAtual.isBefore(dataIng)){
+            throw new Exception("O participante ainda possui ingressos válidos!");
+        }
+
+        for (Ingresso ingresso:p.getIngressos()){
+            ingresso.setParticipante(null);
+        }
+        p.removerIngressos();
         repositorio.remover(p);
+        repositorio.salvarObjetos();
+
     }
 
     public static void apagarIngresso(String codigo) {
         Ingresso i = repositorio.localizarIngresso(codigo);
+        Evento e = i.getEvento();
+        Participante p = i.getParticipante();
+
+        for (Ingresso ingresso:e.getIngressos()){
+            if (ingresso.getCodigo()==i.getCodigo()){
+                e.getIngressos().remove(ingresso);
+            }
+        }
+
+         for (Ingresso ingresso:p.getIngressos()){
+            if (ingresso.getCodigo()==i.getCodigo()){
+                p.getIngressos().remove(ingresso);
+            }
+        }
         repositorio.remover(i);
+        repositorio.salvarObjetos();
+
     }
 
     public static ArrayList<Evento> listarEventos() {
