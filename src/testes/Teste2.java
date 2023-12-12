@@ -92,9 +92,6 @@ public class Teste2 {
             System.out.println("*************14--->Nao lançou exceção para: apagar participante com ingresso em uso");
         }catch (Exception e) {System.out.println("14ok--->"+e.getMessage());}
 
-
-
-
     }
 
 }
