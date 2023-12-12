@@ -16,12 +16,14 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 import modelo.Convidado;
+import modelo.Ingresso;
 import modelo.Participante;
 import regras_negocio.Fachada;
 
@@ -36,7 +38,6 @@ public class TelaParticipantes {
 	private JLabel label_1;
 	private JLabel label_2;
 	private JLabel labelEmpresa;
-	private JButton button;
 	private JButton button_1;
 	private JButton button_2;
 	private JLabel label_3;
@@ -47,6 +48,12 @@ public class TelaParticipantes {
 	private JButton button_3;
 	private JTable table;
 	private JScrollPane scrollPane;
+	private JButton button_4;
+	private JSeparator separator_3;
+	private JLabel label_4;
+	private JTextArea textArea;
+	private JLabel label_5;
+	private JScrollPane scrollPane_1;
 
 	/**
 	 * Launch the application.
@@ -81,13 +88,14 @@ public class TelaParticipantes {
 			public void windowGainedFocus(WindowEvent e) {
 				labelEmpresa.setVisible(false);
 				empresaField.setVisible(false);
+				listagem();
 			}
 
 			public void windowLostFocus(WindowEvent e) {
 			}
 		});
 		frame.setTitle("4Ever System - Participantes");
-		frame.setBounds(100, 100, 871, 479);
+		frame.setBounds(100, 100, 1223, 479);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
@@ -145,17 +153,6 @@ public class TelaParticipantes {
 		labelEmpresa.setBounds(10, 245, 164, 21);
 		frame.getContentPane().add(labelEmpresa);
 
-		button = new JButton("Listar");
-		button.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				listagem();
-			}
-		});
-		button.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		button.setBounds(124, 401, 104, 31);
-		frame.getContentPane().add(button);
-
 		button_1 = new JButton("Limpar");
 		button_1.addMouseListener(new MouseAdapter() {
 			@Override
@@ -176,7 +173,7 @@ public class TelaParticipantes {
 				try {
 					if (checkBox.isSelected()) {
 						Fachada.criarConvidado(cpfField.getText(), nascField.getText(), empresaField.getText());
-					}else {
+					} else {
 						Fachada.criarParticipante(cpfField.getText(), nascField.getText());
 					}
 					labelAviso.setText("Participante criado com sucesso!");
@@ -190,7 +187,7 @@ public class TelaParticipantes {
 		button_2.setBounds(238, 401, 104, 31);
 		frame.getContentPane().add(button_2);
 
-		label_3 = new JLabel("Criar Participante");
+		label_3 = new JLabel("Criar participante");
 		label_3.setFont(new Font("Tahoma", Font.BOLD, 15));
 		label_3.setHorizontalAlignment(SwingConstants.CENTER);
 		label_3.setBounds(98, 23, 157, 21);
@@ -214,17 +211,76 @@ public class TelaParticipantes {
 		frame.getContentPane().add(separator_2);
 
 		button_3 = new JButton("Apagar Selecionado");
+		button_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String cpf = (String) table.getValueAt(table.getSelectedRow(), 0);
+				try {
+					Fachada.apagarParticipante(cpf);
+					labelAviso.setText("Participante apagado com sucesso!");
+				} catch (Exception ex) {
+					labelAviso.setText(ex.getMessage());
+				}
+			}
+		});
 		button_3.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		button_3.setBounds(608, 401, 218, 31);
 		frame.getContentPane().add(button_3);
 
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(417, 28, 406, 337);
+		scrollPane.setBounds(417, 70, 406, 295);
 		frame.getContentPane().add(scrollPane);
 
 		table = new JTable();
 		scrollPane.setViewportView(table);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		button_4 = new JButton("Listar Ingressos");
+		button_4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				textArea.setText("");
+				String cpf = (String) table.getValueAt(table.getSelectedRow(), 0);
+				List<Participante> part = Fachada.listarParticipantes();
+				for (Participante p : part) {
+					if (p.getCPF().equals(cpf)) {
+						List<Ingresso> ingressos = p.getIngressos();
+						for(Ingresso ing : ingressos) {
+							textArea.append(String.format("Código: %s Telefone: %s \n",ing.getCodigo(),ing.getTelefone()));
+							
+						}
+					}
+				}
+
+			}
+		});
+		button_4.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		button_4.setBounds(417, 401, 149, 31);
+		frame.getContentPane().add(button_4);
+
+		separator_3 = new JSeparator();
+		separator_3.setOrientation(SwingConstants.VERTICAL);
+		separator_3.setBounds(857, 20, 1, 412);
+		frame.getContentPane().add(separator_3);
+
+		label_4 = new JLabel("Listagem de ingressos");
+		label_4.setHorizontalAlignment(SwingConstants.CENTER);
+		label_4.setFont(new Font("Tahoma", Font.BOLD, 15));
+		label_4.setBounds(923, 23, 218, 21);
+		frame.getContentPane().add(label_4);
+
+		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(876, 68, 312, 295);
+		frame.getContentPane().add(scrollPane_1);
+
+		textArea = new JTextArea();
+		scrollPane_1.setViewportView(textArea);
+
+		label_5 = new JLabel("Listar participantes");
+		label_5.setHorizontalAlignment(SwingConstants.CENTER);
+		label_5.setFont(new Font("Tahoma", Font.BOLD, 15));
+		label_5.setBounds(542, 23, 157, 21);
+		frame.getContentPane().add(label_5);
 	}
 
 	public void listagem() {
@@ -245,7 +301,8 @@ public class TelaParticipantes {
 				model.addRow(new Object[] { convidado.getCPF() + "", String.join(",", convidado.getNascimento()),
 						convidado.calcularIdade(), convidado.getEmpresa() });
 			} else {
-				model.addRow(new Object[] { p.getCPF() + "", String.join(",", p.getNascimento()), p.calcularIdade(), "-" });
+				model.addRow(
+						new Object[] { p.getCPF() + "", String.join(",", p.getNascimento()), p.calcularIdade(), "-" });
 			}
 		}
 		table.setModel(model);

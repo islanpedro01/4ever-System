@@ -39,6 +39,10 @@ public class Fachada {
             String mensagem = "O cpf " + cpf + " já está cadastrado!";
             throw new Exception(mensagem);
         }
+        
+        if (cpf.isEmpty()){
+        	throw new Exception("O CPF não pode ser vazio!");
+        }
 
         if (nascimento.isEmpty()) {
             throw new Exception("A data de nascimento não pode ser vazia!");
