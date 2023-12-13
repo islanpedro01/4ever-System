@@ -1,2 +1,9 @@
+/.metadata/
+/.gitignore
+/.idea/
+/.project
 /appswing/
+/eventos.csv
+/ingressos.csv
 /out/
+/participantes.csv
